@@ -21,6 +21,7 @@ import {
 import { matchmakerWebSocketHandler } from "./ws/matchmaker/index";
 import XmppServer from "./ws/xmpp/xmpp";
 import { initDiscord } from "./discord/index";
+import { getStorefrontCatalog, rotateShop, initShopRotation } from "./utilites/shop";
 
 const app = new Hono();
 const port = parseInt(process.env.PORT || "3551", 10);
@@ -109,21 +110,12 @@ app.get("/content/api/pages/fortnite-game", (c) => {
 });
 
 app.get("/fortnite/api/storefront/v2/catalog", (c) => {
-  return c.json({
-    refreshIntervalHrs: 24,
-    dailyPurchaseHrs: 24,
-    expiration: new Date(Date.now() + 86400 * 1000).toISOString(),
-    storefronts: [
-      {
-        name: "BRDailyStorefront",
-        catalogEntries: []
-      },
-      {
-        name: "BRWeeklyStorefront",
-        catalogEntries: []
-      }
-    ]
-  });
+  return c.json(getStorefrontCatalog());
+});
+
+app.post("/api/shop/rotate", async (c) => {
+  const result = await rotateShop();
+  return c.json({ success: true, shop: result });
 });
 
 app.get("/fortnite/api/storefront/v2/keychain", (c) => c.json([]));
@@ -227,8 +219,10 @@ XmppServer.start();
 
 await initDiscord();
 
+await initShopRotation();
+
 Bun.serve({
-  fetch(req, server) {
+  fetch(req: Request, server: any) {
     if (server.upgrade(req)) {
       return;
     }

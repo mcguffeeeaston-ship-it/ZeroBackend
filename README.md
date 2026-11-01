@@ -32,7 +32,8 @@
   - `QueryProfile`, `EquipBattleRoyaleCustomization`, `SetCosmeticLockerSlot`, `SetCosmeticLockerBanner`, `SetMtxPlatform`.
   - Default unlocked cosmetics, emotes, wraps, and pickaxes.
 - [x] **Cloudstorage & ClientSettings**: System INI distribution (`DefaultEngine.ini`, `DefaultGame.ini`) and user `ClientSettings.Sav` persistence.
-- [x] **Discord Integration**: OAuth account linking, launcher exchange code generator, and webhook notifications.
+- [x] **Item Shop Auto-Rotation & Discord Shop Pings**: Dynamic storefront rotation with Discord embeds and role pings.
+- [x] **Discord Integration & Startup Alerts**: Server online notifications, OAuth account linking, launcher exchange codes, and webhook alerts.
 
 ---
 
@@ -112,6 +113,5 @@ bun src/index.ts
 ## Roadmap
 
 - [ ] Battle pass tiered purchase flow
-- [ ] Automated shop rotations with Discord screenshot generation
 - [ ] Save The World (STW) profile operations
 - [ ] In-game gifting between friends

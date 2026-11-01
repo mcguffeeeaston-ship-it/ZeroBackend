@@ -12,13 +12,13 @@ import {
 export interface MatchmakerSocketData {
   ticketId: string;
   accountId: string;
-  timers: Timer[];
+  timers: Array<ReturnType<typeof setTimeout>>;
 }
 
 export const matchmakerWebSocketHandler = {
   open(ws: any) {
     const ticketId = crypto.randomUUID().replace(/-/g, "");
-    const timers: Timer[] = [];
+    const timers: Array<ReturnType<typeof setTimeout>> = [];
 
     ws.data = {
       ticketId,

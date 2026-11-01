@@ -165,7 +165,7 @@ export function createDefaultAthena(accountId: string): any {
     wipeNumber: 1,
     accountId,
     profileId: "athena",
-    version: "zero_11.50",
+    version: "zero",
     items,
     stats: {
       attributes: {
@@ -236,7 +236,7 @@ export function createDefaultCommonCore(accountId: string): any {
     wipeNumber: 1,
     accountId,
     profileId: "common_core",
-    version: "zero_11.50",
+    version: "zero",
     items: {
       "Currency:MtxPurchased": {
         templateId: "Currency:MtxPurchased",
@@ -299,7 +299,7 @@ export async function getOrCreateProfile(accountId: string, profileId: string): 
         wipeNumber: 1,
         accountId,
         profileId,
-        version: "zero_11.50",
+        version: "zero",
         items: {},
         stats: { attributes: {} },
         commandRevision: 1

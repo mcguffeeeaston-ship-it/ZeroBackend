@@ -165,7 +165,7 @@ export function createDefaultAthena(accountId: string): any {
     wipeNumber: 1,
     accountId,
     profileId: "athena",
-    version: "zero",
+    version: "zero_11.50",
     items,
     stats: {
       attributes: {
@@ -236,7 +236,7 @@ export function createDefaultCommonCore(accountId: string): any {
     wipeNumber: 1,
     accountId,
     profileId: "common_core",
-    version: "zero",
+    version: "zero_11.50",
     items: {
       "Currency:MtxPurchased": {
         templateId: "Currency:MtxPurchased",
@@ -283,6 +283,75 @@ export function createDefaultCommonCore(accountId: string): any {
   };
 }
 
+export function createDefaultCampaign(accountId: string): any {
+  const now = new Date().toISOString();
+  return {
+    _id: accountId,
+    created: now,
+    updated: now,
+    rvn: 1,
+    wipeNumber: 1,
+    accountId,
+    profileId: "campaign",
+    version: "zero_11.50",
+    items: {
+      "Token:helixbackend": {
+        templateId: "Token:helixbackend",
+        attributes: { item_seen: true },
+        quantity: 1
+      },
+      "Quest:stonewoodquest_joelkarolina_savesurvivors": {
+        templateId: "Quest:stonewoodquest_joelkarolina_savesurvivors",
+        attributes: {
+          completion_stonewoodquest_joelkarolina_savesurvivors: 100,
+          level: -1,
+          item_seen: true,
+          quest_state: "Claimed",
+          xp: 0,
+          favorite: false
+        },
+        quantity: 1
+      }
+    },
+    stats: {
+      attributes: {
+        inventory_limit_bonus: 0,
+        unreal_purchased: true,
+        founder_packs: ["FounderPack_Standard"],
+        legacy_research_points_spent: 0
+      }
+    },
+    commandRevision: 1
+  };
+}
+
+export function createDefaultCreative(accountId: string): any {
+  const now = new Date().toISOString();
+  return {
+    _id: accountId,
+    created: now,
+    updated: now,
+    rvn: 1,
+    wipeNumber: 1,
+    accountId,
+    profileId: "creative",
+    version: "zero_11.50",
+    items: {
+      "Token:helixbackend": {
+        templateId: "Token:helixbackend",
+        attributes: { item_seen: true },
+        quantity: 1
+      }
+    },
+    stats: {
+      attributes: {
+        inventory_limit_bonus: 0
+      }
+    },
+    commandRevision: 1
+  };
+}
+
 export async function getOrCreateProfile(accountId: string, profileId: string): Promise<any> {
   let profile = await getProfile(accountId, profileId);
   if (!profile) {
@@ -290,6 +359,10 @@ export async function getOrCreateProfile(accountId: string, profileId: string): 
       profile = createDefaultAthena(accountId);
     } else if (profileId === "common_core") {
       profile = createDefaultCommonCore(accountId);
+    } else if (profileId === "campaign") {
+      profile = createDefaultCampaign(accountId);
+    } else if (profileId === "creative") {
+      profile = createDefaultCreative(accountId);
     } else {
       profile = {
         _id: accountId,
@@ -299,7 +372,7 @@ export async function getOrCreateProfile(accountId: string, profileId: string): 
         wipeNumber: 1,
         accountId,
         profileId,
-        version: "zero",
+        version: "zero_11.50",
         items: {},
         stats: { attributes: {} },
         commandRevision: 1
@@ -456,6 +529,34 @@ export async function handleMcpOperation(
       changeType: "fullProfileUpdate",
       profile
     });
+  } else if (operation === "PurchaseBattlePassTierOffers") {
+    const tierCount = payload.tierCount || 1;
+    if (profile.stats?.attributes) {
+      profile.stats.attributes.book_level = Math.min(100, (profile.stats.attributes.book_level || 1) + tierCount);
+      profile.rvn = (profile.rvn || 0) + 1;
+      saveNeeded = true;
+      profileChanges.push({
+        changeType: "statModified",
+        name: "book_level",
+        value: profile.stats.attributes.book_level
+      });
+    }
+  } else if (operation === "GiftCatalogEntry") {
+    const receiverId = payload.receiverId || "";
+    if (profile.stats?.attributes) {
+      if (!profile.stats.attributes.gift_history) profile.stats.attributes.gift_history = {};
+      profile.stats.attributes.gift_history[receiverId] = {
+        time: new Date().toISOString(),
+        offerId: payload.offerId || ""
+      };
+      profile.rvn = (profile.rvn || 0) + 1;
+      saveNeeded = true;
+      profileChanges.push({
+        changeType: "statModified",
+        name: "gift_history",
+        value: profile.stats.attributes.gift_history
+      });
+    }
   } else if (operation === "ClaimMfaEnabled") {
     if (profile.stats?.attributes) {
       profile.stats.attributes.mfa_enabled = true;

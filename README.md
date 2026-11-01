@@ -30,10 +30,18 @@
 - [x] **Profile & MCP Operations**:
   - `ClientQuestLogin` (daily login rewards, challenges, level 100 battle pass stats).
   - `QueryProfile`, `EquipBattleRoyaleCustomization`, `SetCosmeticLockerSlot`, `SetCosmeticLockerBanner`, `SetMtxPlatform`.
+  - Save The World (`campaign`) and Creative profile support.
+  - Battle Pass tier purchasing (`PurchaseBattlePassTierOffers`) and item shop purchases (`PurchaseCatalogEntry`).
+  - Gifting items between friends (`GiftCatalogEntry`).
   - Default unlocked cosmetics, emotes, wraps, and pickaxes.
 - [x] **Cloudstorage & ClientSettings**: System INI distribution (`DefaultEngine.ini`, `DefaultGame.ini`) and user `ClientSettings.Sav` persistence.
 - [x] **Item Shop Auto-Rotation & Discord Shop Pings**: Dynamic storefront rotation with Discord embeds and role pings.
 - [x] **Discord Integration & Startup Alerts**: Server online notifications, OAuth account linking, launcher exchange codes, and webhook alerts.
+- [x] **Admin Dashboard & Management**:
+  - Web management dashboard (`GET /dashboard`) for inspecting online servers, users, and item shop status.
+  - Account moderation APIs (`/api/admin/ban/:accountId` & `/api/admin/unban/:accountId`).
+  - Creative island mnemonic code lookup (`/links/api/fn/mnemonic/:code`).
+  - EULA, terms, and privacy policy endpoints.
 
 ---
 
@@ -107,11 +115,16 @@ bun src/index.ts
 | **Party** | `GET /party/api/v1/Fortnite/user/:accountId` | Party lookup and synchronization |
 | **GameServer** | `POST /api/elo/kill`, `POST /api/elo/win` | Real-time match rewards (V-Bucks, Hype) |
 | **Leaderboards** | `GET /*/api/statsv2/leaderboards/:leaderboardName` | Arena Hype & Kills leaderboards |
+| **Admin Dashboard**| `GET /dashboard` | Web browser control panel & server monitor |
+| **Moderation** | `POST /api/admin/ban/:accountId` | Account ban and restriction management |
+| **Creative** | `GET /links/api/fn/mnemonic/:code` | Creative island code resolver |
 
 ---
 
-## Roadmap
+## Features Implemented
 
-- [ ] Battle pass tiered purchase flow
-- [ ] Save The World (STW) profile operations
-- [ ] In-game gifting between friends
+- [x] Battle pass tiered purchase flow
+- [x] Save The World (STW) profile operations
+- [x] In-game gifting between friends
+- [x] Web Admin & Server Monitor Dashboard
+- [x] Ban enforcement & account status checks

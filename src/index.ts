@@ -11,6 +11,7 @@ import social from "./routes/social";
 import gameserver from "./routes/gameserver";
 import leaderboards from "./routes/leaderboards";
 import calendar from "./routes/calendar";
+import admin from "./routes/admin";
 import { handleMcpOperation } from "./operations/ClientQuestLogin";
 import {
   createMatchmakingTicket,
@@ -46,6 +47,7 @@ app.route("/", social);
 app.route("/", gameserver);
 app.route("/", leaderboards);
 app.route("/", calendar);
+app.route("/", admin);
 
 app.get("/", (c) => {
   return c.json({
@@ -236,6 +238,7 @@ Bun.serve({
 logger.info(`===============================================`);
 logger.info(`  Zero Backend Fortnite Server is Online!      `);
 logger.info(`  HTTP & Matchmaker WebSocket: http://127.0.0.1:${port}`);
+logger.info(`  Control Dashboard: http://127.0.0.1:${port}/dashboard`);
 logger.info(`  XMPP Service: 127.0.0.1:5222                 `);
 logger.info(`===============================================`);
 

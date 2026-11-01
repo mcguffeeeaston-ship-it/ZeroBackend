@@ -87,6 +87,19 @@ oauth.post("/oauth/token", async (c) => {
     user = await findOrCreateUser(username);
   }
 
+  if (user.banned) {
+    return c.json(
+      {
+        errorCode: "errors.com.epicgames.account.account_not_active",
+        errorMessage: "You have been banned from Fortnite.",
+        numericErrorCode: 28004,
+        originatingService: "Account",
+        intent: "prod"
+      },
+      400
+    );
+  }
+
   const token = `eg1~${crypto.randomBytes(32).toString("hex")}`;
   const refreshToken = `eg1~${crypto.randomBytes(32).toString("hex")}`;
 
